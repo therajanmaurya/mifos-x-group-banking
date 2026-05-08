@@ -15,7 +15,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.core.store"
+    namespace = "org.mifos.groupbanking.core.store"
 }
 
 kotlin {

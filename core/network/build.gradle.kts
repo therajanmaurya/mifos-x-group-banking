@@ -15,7 +15,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.core.network"
+    namespace = "org.mifos.groupbanking.core.network"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }

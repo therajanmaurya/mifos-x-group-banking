@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.core.data"
+    namespace = "org.mifos.groupbanking.core.data"
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

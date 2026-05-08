@@ -18,16 +18,16 @@ import androidx.navigation.navigation
 import cmp.navigation.authenticatednavbar.AuthenticatedNavbarRoute
 import cmp.navigation.authenticatednavbar.authenticatedNavbarGraph
 import kotlinx.serialization.Serializable
-import org.mifos.feature.crypto.navigation.cryptoGraph
-import org.mifos.feature.crypto.navigation.navigateToCrypto
-import org.mifos.feature.currencyrates.navigation.currencyRatesGraph
-import org.mifos.feature.currencyrates.navigation.navigateToCurrencyRates
-import org.mifos.feature.currencyrates.navigation.navigateToRateHistory
-import org.mifos.feature.emicalculator.navigation.emiCalculatorDestination
-import org.mifos.feature.emicalculator.navigation.navigateToEmiCalculator
-import org.mifos.feature.settings.navigateToSettings
-import org.mifos.feature.settings.notificationDestination
-import org.mifos.feature.settings.settingsDestination
+import org.mifos.groupbanking.feature.crypto.navigation.cryptoGraph
+import org.mifos.groupbanking.feature.crypto.navigation.navigateToCrypto
+import org.mifos.groupbanking.feature.currencyrates.navigation.currencyRatesGraph
+import org.mifos.groupbanking.feature.currencyrates.navigation.navigateToCurrencyRates
+import org.mifos.groupbanking.feature.currencyrates.navigation.navigateToRateHistory
+import org.mifos.groupbanking.feature.emicalculator.navigation.emiCalculatorDestination
+import org.mifos.groupbanking.feature.emicalculator.navigation.navigateToEmiCalculator
+import org.mifos.groupbanking.feature.settings.navigateToSettings
+import org.mifos.groupbanking.feature.settings.notificationDestination
+import org.mifos.groupbanking.feature.settings.settingsDestination
 
 @Serializable
 internal data object AuthenticatedGraphRoute

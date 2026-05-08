@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.core.common"
+    namespace = "org.mifos.groupbanking.core.common"
 }
 
 kotlin {

@@ -158,14 +158,14 @@ update_root_project_name() {
     print_processing "Updating rootProject.name in $settings_file"
 
     # Check if the line already exists
-    if grep -qE '^\s*rootProject\.name\s*=' "$settings_file"; then
+    if grep -qE '^[[:space:]]*rootProject\.name[[:space:]]*=' "$settings_file"; then
         # Replace using BSD/GNU compatible sed
         if [[ "$OSTYPE" == "darwin"* ]]; then
             # macOS (BSD sed requires backup suffix)
-            sed -i '' -E "s|^\s*rootProject\.name\s*=.*|rootProject.name = \"$PROJECT_NAME\"|" "$settings_file"
+            sed -i '' -E "s|^[[:space:]]*rootProject\.name[[:space:]]*=.*|rootProject.name = \"$PROJECT_NAME\"|" "$settings_file"
         else
             # Linux/GNU sed
-            sed -i -E "s|^\s*rootProject\.name\s*=.*|rootProject.name = \"$PROJECT_NAME\"|" "$settings_file"
+            sed -i -E "s|^[[:space:]]*rootProject\.name[[:space:]]*=.*|rootProject.name = \"$PROJECT_NAME\"|" "$settings_file"
         fi
         print_success "Updated rootProject.name to \"$PROJECT_NAME\""
     else
@@ -363,24 +363,33 @@ process_module_dirs() {
         if [ -d "$kotlin_dir" ]; then
             print_processing "Processing $kotlin_dir"
 
-            mkdir -p "$kotlin_dir/$SUBDIR"
-
             if [ -d "$kotlin_dir/org/mifos" ]; then
                 print_info "Moving files from org/mifos to $SUBDIR"
-                cp -r "$kotlin_dir/org/mifos"/* "$kotlin_dir/$SUBDIR/" 2>/dev/null || true
+                # Stage to a temp dir OUTSIDE kotlin_dir to avoid recursive-copy
+                # bug when $SUBDIR overlaps the source path (e.g. org.mifos.foo
+                # → kotlin/org/mifos/foo, which would otherwise be created INSIDE
+                # the source then nuked by `rm -rf kotlin_dir/org/mifos`).
+                local stage_dir
+                stage_dir="$(mktemp -d "${TMPDIR:-/tmp}/customizer.XXXXXX")"
+                cp -R "$kotlin_dir/org/mifos"/. "$stage_dir/" 2>/dev/null || true
 
-                if [ -d "$kotlin_dir/$SUBDIR" ]; then
-                    print_info "Updating package declarations and imports"
-                    find "$kotlin_dir/$SUBDIR" -type f -name "*.kt" -exec sed -i.bak \
-                        -e "s/package org\.mifos/package $PACKAGE/g" \
-                        -e "s/package com\.niyaj/package $PACKAGE/g" \
-                        -e "s/import org\.mifos/import $PACKAGE/g" \
-                        -e "s/import com\.niyaj/import $PACKAGE/g" {} \;
-                fi
+                print_info "Updating package declarations and imports"
+                find "$stage_dir" -type f -name "*.kt" -exec sed -i.bak \
+                    -e "s/package org\.mifos/package $PACKAGE/g" \
+                    -e "s/package com\.niyaj/package $PACKAGE/g" \
+                    -e "s/import org\.mifos/import $PACKAGE/g" \
+                    -e "s/import com\.niyaj/import $PACKAGE/g" {} \;
 
                 print_info "Cleaning up old directory structure"
                 rm -rf "$kotlin_dir/org/mifos"
                 rmdir "$kotlin_dir/org" 2>/dev/null || true
+
+                mkdir -p "$kotlin_dir/$SUBDIR"
+                # Move staged content (incl. dotfiles) into the new SUBDIR
+                if [ -n "$(ls -A "$stage_dir" 2>/dev/null)" ]; then
+                    cp -R "$stage_dir"/. "$kotlin_dir/$SUBDIR/" 2>/dev/null || true
+                fi
+                rm -rf "$stage_dir"
             fi
         fi
     done
@@ -425,7 +434,7 @@ update_android_app_imports() {
         if grep -q "import org\.mifos" "$file"; then
             print_processing "Updating imports in: $file"
             sed -i.bak "s/import org\.mifos/import $PACKAGE/g" "$file"
-            ((count++))
+            count=$((count + 1))
         fi
     done < <(find "$target_dir" -type f -name "*.kt")
 

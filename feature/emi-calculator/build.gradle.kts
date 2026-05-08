@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.feature.emicalculator"
+    namespace = "org.mifos.groupbanking.feature.emicalculator"
 }
 
 kotlin {

@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.feature.crypto"
+    namespace = "org.mifos.groupbanking.feature.crypto"
 }
 
 kotlin {

@@ -17,9 +17,9 @@ import java.io.File
  * Desktop (JVM) factory for creating Room 3 database instances.
  *
  * Resolves the database path to the OS-appropriate application data directory:
- * - **Windows**: `%APPDATA%/MifosDatabase/`
- * - **macOS**: `~/Library/Application Support/MifosDatabase/`
- * - **Linux**: `~/.local/share/MifosDatabase/`
+ * - **Windows**: `%APPDATA%/CommonPurseDatabase/`
+ * - **macOS**: `~/Library/Application Support/CommonPurseDatabase/`
+ * - **Linux**: `~/.local/share/CommonPurseDatabase/`
  */
 class AppDatabaseFactory {
 
@@ -53,9 +53,9 @@ class AppDatabaseFactory {
         val os = System.getProperty("os.name").lowercase()
         val userHome = System.getProperty("user.home")
         val appDataDir = when {
-            os.contains("win") -> File(System.getenv("APPDATA"), "MifosDatabase")
-            os.contains("mac") -> File(userHome, "Library/Application Support/MifosDatabase")
-            else -> File(userHome, ".local/share/MifosDatabase")
+            os.contains("win") -> File(System.getenv("APPDATA"), "CommonPurseDatabase")
+            os.contains("mac") -> File(userHome, "Library/Application Support/CommonPurseDatabase")
+            else -> File(userHome, ".local/share/CommonPurseDatabase")
         }
         return File(appDataDir, databaseName)
     }

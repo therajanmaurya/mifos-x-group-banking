@@ -12,7 +12,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.feature.home"
+    namespace = "org.mifos.groupbanking.feature.home"
 }
 
 kotlin {

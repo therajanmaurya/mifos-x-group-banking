@@ -87,7 +87,7 @@ extensions.configure<org.ajoberstar.reckon.gradle.ReckonExtension> {
     setTagWriter { it.toString() }
 }
 
-rootProject.name = "kmp-project-template"
+rootProject.name = "CommonPurse"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
